@@ -22,4 +22,4 @@ VFPL is not case sensitive, but there are several [conventions](./best-practices
 Every function must explicitly return a value, `absent` is the recommended value if there is none returned, but the other null values can be
 used as well.
 
-The program must also always be terminated by a `please go to sleep.`. 
+The program must also always be terminated by a `please go to sleep.`.
