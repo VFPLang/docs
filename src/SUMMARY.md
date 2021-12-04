@@ -1,3 +1,9 @@
 # Summary
 
-- [Chapter 1](./chapter_1.md)
+[Installation](./installation.md)
+
+- [Introduction](./introduction.md)
+- [Syntax](./syntax.md)
+- [Standard library](./stdlib.md)
+- [Best practices](./best-practices.md)
+- [Examples](./examples.md)
