@@ -1,8 +1,8 @@
 # Summary
 
-[Installation](./installation.md)
+[Introduction](./introduction.md)
 
-- [Introduction](./introduction.md)
+- [Installation](./installation.md)
 - [Syntax](./syntax.md)
 - [Standard library](./stdlib.md)
 - [Best practices](./best-practices.md)
