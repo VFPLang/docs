@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Installation - VFPL</title>
+        <title>Introduction - VFPL</title>
                 
 
         <!-- Custom HTML head -->
@@ -82,7 +82,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="installation.html">Installation</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">2.</strong> Syntax</a></li><li class="chapter-item expanded "><a href="stdlib.html"><strong aria-hidden="true">3.</strong> Standard library</a></li><li class="chapter-item expanded "><a href="best-practices.html"><strong aria-hidden="true">4.</strong> Best practices</a></li><li class="chapter-item expanded "><a href="examples.html"><strong aria-hidden="true">5.</strong> Examples</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="syntax.html"><strong aria-hidden="true">2.</strong> Syntax</a></li><li class="chapter-item expanded "><a href="stdlib.html"><strong aria-hidden="true">3.</strong> Standard library</a></li><li class="chapter-item expanded "><a href="best-practices.html"><strong aria-hidden="true">4.</strong> Best practices</a></li><li class="chapter-item expanded "><a href="examples.html"><strong aria-hidden="true">5.</strong> Examples</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -143,25 +143,28 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="install"><a class="header" href="#install">Install</a></h1>
-<p>The only way to use VFPL for now is to build the runtime yourself.</p>
-<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
-<ul>
-<li><a href="https://www.rust-lang.org/">Rust</a> needs to be installed</li>
-</ul>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
-<ol>
-<li>Clone the <a href="https://github.com/VFPLang/vfpl">https://github.com/VFPLang/vfpl</a> repository</li>
-<li>Optionally, run <code>cargo test</code></li>
-<li>Run <code>cargo install --path .</code></li>
-</ol>
+                        <h1 id="vfpl"><a class="header" href="#vfpl">VFPL</a></h1>
+<p><strong>NOTE: VFPL is very much work in progress and several major features are still missing</strong></p>
+<p>VFPL is formal, politely verbose programming language for building next-gen reliable applications.</p>
+<p>It does not aim to be the most expressive and simple, but attempts to scale no matter how large the codebase and ambitions of the programmer
+are. It's main target is the large enterprise audience, but it is a good fit for smaller programs as well.</p>
+<p>VFPL is imperative and statically and strongly typed (although the current implementation is dynamic). It is also null safe and has 4
+different null values (<code>absent</code>, <code>null</code>, <code>undefined</code> and <code>novalue</code>), because not every absence is created equal.</p>
+<p>The hello world looks like this:</p>
+<pre><code class="language-vfpl">please call println with the argument &quot;Hello, World!&quot; as x.
+please go to sleep.
+</code></pre>
+<p>VFPL is not case sensitive, but there are several <a href="./best-practices.html">conventions</a> around naming.</p>
+<p>Every function must explicitly return a value, <code>absent</code> is the recommended value if there is none returned, but the other null values can be
+used as well.</p>
+<p>The program must also always be terminated by a <code>please go to sleep.</code>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                                                    <a rel="next" href="introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                                    <a rel="next" href="installation.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -172,7 +175,7 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                                    <a rel="next" href="introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                    <a rel="next" href="installation.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                             </nav>
