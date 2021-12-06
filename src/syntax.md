@@ -86,108 +86,97 @@ please call add_3_ints with the arguments 5 as x, 6 as y and 7 as z.
 
 # Grammar
 
-The grammar is written in a modified [Backus–Naur form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)
+The grammar is written in BNF
 
+```bnf
+program ::= body
+body ::= (statement)*
+statement ::= "please" (
+    variable-init |
+    variable-set |
+    if |
+    while |
+    fn-decl |
+    break |
+    return |
+    terminate |
+    expr
+) "."
+
+typed-ident ::= ident "as" type
+ident ::="regexp:\w"+
+
+variable-init ::= "initialize variable" typed-ident "with the value of" expr
+variable-set ::= "set the variable" ident "to the value of" expr
+
+{ control flow }
+if ::= if-part "please end check"
+if-part ::= "check wheter" expr ", then do" body (else)?
+else ::= "otherwise, " (if-part | body)
+
+while ::= "repeat while" expr "do"
+                body
+         "please end while"
+break ::= "break out of this while"
+
+
+{function}
+fn-decl ::= "create function" ident "with" params fn-return
+                body
+            "please end function" ident
+params ::= no-params | single-params | multi-params
+no-params ::= "no parameters"
+single-params ::="the parameter" typed-ident
+multi-params ::="the parameters" typed-ident ("," typed-ident)* "and" typed-ident
+fn-return ::="that returns" type
+return ::="return" expr "from the function"
+
+{other}
+terminate ::= "go to sleep"
+
+{fn calls}
+call ::= "call" ident "with" call-args
+call-args ::= no-arg | single-arg | multi-arg
+no-arg ::="no arguments"
+single-arg ::="the argument" expr "as" ident
+multi-arg ::="the arguments" expr "as" ident ("," expr "as" ident)* "and" expr "as" ident
+
+{type}
+type ::= ident | nullable
+nullable ::= "absent" | "null" | "novalue" | "undefined"
+
+{expressions}
+expr ::= comparison
+
+comparison ::= term ((
+    "does not have the value" |
+    "has the value" |
+    "is greater than" |
+    "is less than" |
+    "is greater or equal than" |
+    "is less or equal than"
+) comparison)?
+
+term ::= add | subtract | factor
+add ::= "add" factor "to" term
+subtract ::= "subtract" factor "from" term
+
+factor::= multiply | divide | modulo | call-expr
+
+multiply ::= "multiply" call-expr "with" factor
+divide ::= "divide" call-expr "by" factor
+modulo ::= "take" call-expr "modulo" factor
+
+call-expr ::= call | primary-expr
+
+primary-expr ::= "(" expr ")" | literal
+
+{ literals }
+literal ::= nullable | "regexp:\".*\"" | number | "true" | "false" | ident
+number ::= int | float
+float ::= "-"? "regexp:\d"+ "."? "regexp:\d"+
+int ::= "-"? "regexp:\d"+
 ```
-<program> = <body>
-
-<body> = ( <statement> )*
-
-<typed-ident> = IDENT "as" <type>
-
-<statement> = "please" ( <variable-init>
-                        | <variable-set>
-                        | <if>
-                        | <while>
-                        | <fn-decl>
-                        | <break>
-                        | <return>
-                        | <terminate>
-                        | <expr>
-                       ) "."
-
-<variable-init> = "initialize variable" <typed-ident> "with the value of" <expr>
-
-<variable-set> = "set the variable" <IDENT> "to the value of" <expr>
-
-
-# control flow
-
-<if> = <if-part>
-       "please end check"
-
-<if-part> = "check whether" <expr> ", then do"
-                <body>
-            ( <else> )?
-
-
-<else> = "otherwise," ( <if-part> | <body> )
-
-<while> = "repeat while" <expr> "do"
-              <body>
-          "please end while"
-
-<break> = "break out of this while"
-
-# function
-
-<fn-decl> = "create function" IDENT "with" <params> <fn-return>
-                <body>
-            "please end function" IDENT
-
-<params> = (<no-params> | <single-params> | <multi-param>)
-
-<no-params> = "no parameters"
-
-<single-param> = "the parameter" <typed-ident>
-
-<multi-param> = "the parameters" <typed-ident> ( "," <typed-ident> )* "and" <typed-ident>
-
-<fn-return> = "that returns" type
-
-<return> = "return" <expr> "from the function"
-
-# other
-
-<terminate> = "go to sleep"
-
-
-# fn calls
-
-<call> = "call" IDENT "with" <call-args>
-
-<call-args> = <no-args> | <single-arg> | <multi-arg>
-
-<no-arg> = "no arguments"
-
-<single-arg> = "the argument" <expr> "as" IDENT
-
-<multi-arg> = "the arguments" <expr> "as" IDENT ( "," <expr> "as" IDENT )* "and" <expr> "as" IDENT
-
-# type
-
-<type> = IDENT | <nullable>
-
-<nullable> = "absent" | "null" | "novalue" | "undefined"
-
-# expressions
-
-<expr> = <comparison>
-
-<comparison> = <term> ( ( "does not have the value"
-                          | "has the value"
-                          | "is greater than"
-                          | "is less than"
-                          | "is greater or equal than"
-                          | "is less or equal than"
-                         ) <comparison> )?
-
-
-<term> = <add> | <subtract> | <factor>
-
-<add> = "add" <factor> "to" <term>
-
-<subtract> = "subtract" <factor> "from" <term>
 
 
 <factor> = <multiply> | <divide> | <modulo> | <call-expr>
@@ -215,74 +204,3 @@ The grammar is written in a modified [Backus–Naur form](https://en.wikipedia.o
 
 <float> = "-"? ( DIGIT )+ ( "." ( DIGIT )+ )?
 ```
-
-# List of keywords
-
-## Normal keywords
-
-Normal keywords cannot be used as identifiers
-
-* `please`
-* `as`
-* `initialize`
-* `variable`
-* `end`
-* `check`
-* `whether`
-* `then`
-* `do`
-* `otherwise`
-* `break`
-* `this`
-* `create`
-* `function`
-* `call`
-* `and`
-* `absent`
-* `null`
-* `novalue`
-* `undefined`
-* `true`
-* `false`
-* `not`
-* `or`
-* `repeat`
-* `return`
-* `while`
-
-## Conditional keywords
-
-Conditional keywords can be used as identifiers
-
-* `add`
-* `sub`
-* `mul`
-* `div`
-* `mod`
-* `with`
-* `the`
-* `value`
-* `of`
-* `set`
-* `to`
-* `from`
-* `by`
-* `take`
-* `out`
-* `parameter`
-* `parameters`
-* `that`
-* `returns`
-* `no`
-* `argument`
-* `arguments`
-* `go`
-* `sleep`
-* `does`
-* `has`
-* `is`
-* `have`
-* `greater`
-* `less`
-* `than`
-* `equal`
