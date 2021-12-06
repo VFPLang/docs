@@ -205,132 +205,94 @@ please call add_ints with the arguments 5 as x and 6 as y.
 please call add_3_ints with the arguments 5 as x, 6 as y and 7 as z.
 </code></pre>
 <h2 id="grammar"><a class="header" href="#grammar">Grammar</a></h2>
-<p>The grammar is written in a modified <a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form">Backus–Naur form</a></p>
-<pre><code>&lt;program&gt; = &lt;body&gt;
+<p>The grammar is written in BNF</p>
+<pre><code class="language-bnf">program ::= body
+body ::= (statement)*
+statement ::= &quot;please&quot; (
+    variable-init |
+    variable-set |
+    if |
+    while |
+    fn-decl |
+    break |
+    return |
+    terminate |
+    expr
+) &quot;.&quot;
 
-&lt;body&gt; = ( &lt;statement&gt; )*
+typed-ident ::= ident &quot;as&quot; type
+ident ::=&quot;regexp:\w&quot;+
 
-&lt;typed-ident&gt; = IDENT &quot;as&quot; &lt;type&gt;
+variable-init ::= &quot;initialize variable&quot; typed-ident &quot;with the value of&quot; expr
+variable-set ::= &quot;set the variable&quot; ident &quot;to the value of&quot; expr
 
-&lt;statement&gt; = &quot;please&quot; ( &lt;variable-init&gt;
-                        | &lt;variable-set&gt;
-                        | &lt;if&gt;
-                        | &lt;while&gt;
-                        | &lt;fn-decl&gt;
-                        | &lt;break&gt;
-                        | &lt;return&gt;
-                        | &lt;terminate&gt;
-                        | &lt;expr&gt;
-                       ) &quot;.&quot;
+{ control flow }
+if ::= if-part &quot;please end check&quot;
+if-part ::= &quot;check wheter&quot; expr &quot;, then do&quot; body (else)?
+else ::= &quot;otherwise, &quot; (if-part | body)
 
-&lt;variable-init&gt; = &quot;initialize variable&quot; &lt;typed-ident&gt; &quot;with the value of&quot; &lt;expr&gt;
-
-&lt;variable-set&gt; = &quot;set the variable&quot; &lt;IDENT&gt; &quot;to the value of&quot; &lt;expr&gt;
-
-
-# control flow
-
-&lt;if&gt; = &lt;if-part&gt;
-       &quot;please end check&quot;
-
-&lt;if-part&gt; = &quot;check whether&quot; &lt;expr&gt; &quot;, then do&quot;
-                &lt;body&gt;
-            ( &lt;else&gt; )?
-
-
-&lt;else&gt; = &quot;otherwise,&quot; ( &lt;if-part&gt; | &lt;body&gt; )
-
-&lt;while&gt; = &quot;repeat while&quot; &lt;expr&gt; &quot;do&quot;
-              &lt;body&gt;
-          &quot;please end while&quot;
-
-&lt;break&gt; = &quot;break out of this while&quot;
-
-# function
-
-&lt;fn-decl&gt; = &quot;create function&quot; IDENT &quot;with&quot; &lt;params&gt; &lt;fn-return&gt;
-                &lt;body&gt;
-            &quot;please end function&quot; IDENT
-
-&lt;params&gt; = (&lt;no-params&gt; | &lt;single-params&gt; | &lt;multi-param&gt;)
-
-&lt;no-params&gt; = &quot;no parameters&quot;
-
-&lt;single-param&gt; = &quot;the parameter&quot; &lt;typed-ident&gt;
-
-&lt;multi-param&gt; = &quot;the parameters&quot; &lt;typed-ident&gt; ( &quot;,&quot; &lt;typed-ident&gt; )* &quot;and&quot; &lt;typed-ident&gt;
-
-&lt;fn-return&gt; = &quot;that returns&quot; type
-
-&lt;return&gt; = &quot;return&quot; &lt;expr&gt; &quot;from the function&quot;
-
-# other
-
-&lt;terminate&gt; = &quot;go to sleep&quot;
+while ::= &quot;repeat while&quot; expr &quot;do&quot;
+                body
+         &quot;please end while&quot;
+break ::= &quot;break out of this while&quot;
 
 
-# fn calls
+{function}
+fn-decl ::= &quot;create function&quot; ident &quot;with&quot; params fn-return
+                body
+            &quot;please end function&quot; ident
+params ::= no-params | single-params | multi-params
+no-params ::= &quot;no parameters&quot;
+single-params ::=&quot;the parameter&quot; typed-ident
+multi-params ::=&quot;the parameters&quot; typed-ident (&quot;,&quot; typed-ident)* &quot;and&quot; typed-ident
+fn-return ::=&quot;that returns&quot; type
+return ::=&quot;return&quot; expr &quot;from the function&quot;
 
-&lt;call&gt; = &quot;call&quot; IDENT &quot;with&quot; &lt;call-args&gt;
+{other}
+terminate ::= &quot;go to sleep&quot;
 
-&lt;call-args&gt; = &lt;no-args&gt; | &lt;single-arg&gt; | &lt;multi-arg&gt;
+{fn calls}
+call ::= &quot;call&quot; ident &quot;with&quot; call-args
+call-args ::= no-arg | single-arg | multi-arg
+no-arg ::=&quot;no arguments&quot;
+single-arg ::=&quot;the argument&quot; expr &quot;as&quot; ident
+multi-arg ::=&quot;the arguments&quot; expr &quot;as&quot; ident (&quot;,&quot; expr &quot;as&quot; ident)* &quot;and&quot; expr &quot;as&quot; ident
 
-&lt;no-arg&gt; = &quot;no arguments&quot;
+{type}
+type ::= ident | nullable
+nullable ::= &quot;absent&quot; | &quot;null&quot; | &quot;novalue&quot; | &quot;undefined&quot;
 
-&lt;single-arg&gt; = &quot;the argument&quot; &lt;expr&gt; &quot;as&quot; IDENT
+{expressions}
+expr ::= comparison
 
-&lt;multi-arg&gt; = &quot;the arguments&quot; &lt;expr&gt; &quot;as&quot; IDENT ( &quot;,&quot; &lt;expr&gt; &quot;as&quot; IDENT )* &quot;and&quot; &lt;expr&gt; &quot;as&quot; IDENT
+comparison ::= term ((
+    &quot;does not have the value&quot; |
+    &quot;has the value&quot; |
+    &quot;is greater than&quot; |
+    &quot;is less than&quot; |
+    &quot;is greater or equal than&quot; |
+    &quot;is less or equal than&quot;
+) comparison)?
 
-# type
+term ::= add | subtract | factor
+add ::= &quot;add&quot; factor &quot;to&quot; term
+subtract ::= &quot;subtract&quot; factor &quot;from&quot; term
 
-&lt;type&gt; = IDENT | &lt;nullable&gt;
+factor::= multiply | divide | modulo | call-expr
 
-&lt;nullable&gt; = &quot;absent&quot; | &quot;null&quot; | &quot;novalue&quot; | &quot;undefined&quot;
+multiply ::= &quot;multiply&quot; call-expr &quot;with&quot; factor
+divide ::= &quot;divide&quot; call-expr &quot;by&quot; factor
+modulo ::= &quot;take&quot; call-expr &quot;modulo&quot; factor
 
-# expressions
+call-expr ::= call | primary-expr
 
-&lt;expr&gt; = &lt;comparison&gt;
+primary-expr ::= &quot;(&quot; expr &quot;)&quot; | literal
 
-&lt;comparison&gt; = &lt;term&gt; ( ( &quot;does not have the value&quot;
-                          | &quot;has the value&quot;
-                          | &quot;is greater than&quot;
-                          | &quot;is less than&quot;
-                          | &quot;is greater or equal than&quot;
-                          | &quot;is less or equal than&quot;
-                         ) &lt;comparison&gt; )?
-
-
-&lt;term&gt; = &lt;add&gt; | &lt;subtract&gt; | &lt;factor&gt;
-
-&lt;add&gt; = &quot;add&quot; &lt;factor&gt; &quot;to&quot; &lt;term&gt;
-
-&lt;subtract&gt; = &quot;subtract&quot; &lt;factor&gt; &quot;from&quot; &lt;term&gt;
-
-
-&lt;factor&gt; = &lt;multiply&gt; | &lt;divide&gt; | &lt;modulo&gt; | &lt;call-expr&gt;
-
-&lt;multiply&gt; = &quot;multiply&quot; &lt;call-expr&gt; &quot;with&quot; &lt;factor&gt;
-
-&lt;divide&gt; = &quot;divide&quot; &lt;call-expr&gt; &quot;by&quot; &lt;factor&gt;
-
-&lt;modulo&gt; = &quot;take&quot; &lt;call-expr&gt; &quot;modulo&quot; &lt;factor&gt;
-
-
-&lt;call-expr&gt; = &lt;call&gt; | &lt;literal&gt;
-
-&lt;primary-expr&gt; = &quot;(&quot; &lt;expr&gt; &quot;)&quot; | &lt;literal&gt;
-
-
-
-# literals
-
-&lt;literal&gt; = &lt;nullable&gt; | STRING | &lt;number&gt; | &quot;true&quot; | &quot;false&quot; | IDENT
-
-&lt;number&gt; = &lt;int&gt; | &lt;float&gt;
-
-&lt;int&gt; = &quot;-&quot;? ( DIGIT )+
-
-&lt;float&gt; = &quot;-&quot;? ( DIGIT )+ ( &quot;.&quot; ( DIGIT )+ )?
+{ literals }
+literal ::= nullable | &quot;regexp:\&quot;.*\&quot;&quot; | number | &quot;true&quot; | &quot;false&quot; | ident
+number ::= int | float
+float ::= &quot;-&quot;? &quot;regexp:\d&quot;+ &quot;.&quot;? &quot;regexp:\d&quot;+
+int ::= &quot;-&quot;? &quot;regexp:\d&quot;+
 </code></pre>
 
                     </main>
