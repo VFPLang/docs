@@ -84,7 +84,7 @@ please call add_ints with the arguments 5 as x and 6 as y.
 please call add_3_ints with the arguments 5 as x, 6 as y and 7 as z.
 ```
 
-## Grammar
+# Grammar
 
 The grammar is written in a modified [Backus–Naur form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form)
 
@@ -215,3 +215,74 @@ The grammar is written in a modified [Backus–Naur form](https://en.wikipedia.o
 
 <float> = "-"? ( DIGIT )+ ( "." ( DIGIT )+ )?
 ```
+
+# List of keywords
+
+## Normal keywords
+
+Normal keywords cannot be used as identifiers
+
+* `please`
+* `as`
+* `initialize`
+* `variable`
+* `end`
+* `check`
+* `whether`
+* `then`
+* `do`
+* `otherwise`
+* `break`
+* `this`
+* `create`
+* `function`
+* `call`
+* `and`
+* `absent`
+* `null`
+* `novalue`
+* `undefined`
+* `true`
+* `false`
+* `not`
+* `or`
+* `repeat`
+* `return`
+* `while`
+
+## Conditional keywords
+
+Conditional keywords can be used as identifiers
+
+* `add`
+* `sub`
+* `mul`
+* `div`
+* `mod`
+* `with`
+* `the`
+* `value`
+* `of`
+* `set`
+* `to`
+* `from`
+* `by`
+* `take`
+* `out`
+* `parameter`
+* `parameters`
+* `that`
+* `returns`
+* `no`
+* `argument`
+* `arguments`
+* `go`
+* `sleep`
+* `does`
+* `has`
+* `is`
+* `have`
+* `greater`
+* `less`
+* `than`
+* `equal`
