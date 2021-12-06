@@ -120,7 +120,7 @@ while ::= "repeat while" expr "do"
 break ::= "break out of this while"
 
 
-{function}
+{ function }
 fn-decl ::= "create function" ident "with" params fn-return
                 body
             "please end function" ident
@@ -131,21 +131,21 @@ multi-params ::="the parameters" typed-ident ("," typed-ident)* "and" typed-iden
 fn-return ::="that returns" type
 return ::="return" expr "from the function"
 
-{other}
+{ other }
 terminate ::= "go to sleep"
 
-{fn calls}
+{ fn calls }
 call ::= "call" ident "with" call-args
 call-args ::= no-arg | single-arg | multi-arg
 no-arg ::="no arguments"
 single-arg ::="the argument" expr "as" ident
 multi-arg ::="the arguments" expr "as" ident ("," expr "as" ident)* "and" expr "as" ident
 
-{type}
+{ type }
 type ::= ident | nullable
 nullable ::= "absent" | "null" | "novalue" | "undefined"
 
-{expressions}
+{ expressions }
 expr ::= comparison
 
 comparison ::= term ((
@@ -178,29 +178,73 @@ float ::= "-"? "regexp:\d"+ "."? "regexp:\d"+
 int ::= "-"? "regexp:\d"+
 ```
 
+# List of keywords
 
-<factor> = <multiply> | <divide> | <modulo> | <call-expr>
+## Normal keywords
 
-<multiply> = "multiply" <call-expr> "with" <factor>
+Normal keywords cannot be used as identifiers
 
-<divide> = "divide" <call-expr> "by" <factor>
+* `please`
+* `as`
+* `initialize`
+* `variable`
+* `end`
+* `check`
+* `whether`
+* `then`
+* `do`
+* `otherwise`
+* `break`
+* `this`
+* `create`
+* `function`
+* `call`
+* `and`
+* `absent`
+* `null`
+* `novalue`
+* `undefined`
+* `true`
+* `false`
+* `not`
+* `or`
+* `repeat`
+* `return`
+* `while`
 
-<modulo> = "take" <call-expr> "modulo" <factor>
+## Conditional keywords
 
+Conditional keywords can be used as identifiers
 
-<call-expr> = <call> | <literal>
-
-<primary-expr> = "(" <expr> ")" | <literal>
-
-
-
-# literals
-
-<literal> = <nullable> | STRING | <number> | "true" | "false" | IDENT
-
-<number> = <int> | <float>
-
-<int> = "-"? ( DIGIT )+
-
-<float> = "-"? ( DIGIT )+ ( "." ( DIGIT )+ )?
-```
+* `add`
+* `sub`
+* `mul`
+* `div`
+* `mod`
+* `with`
+* `the`
+* `value`
+* `of`
+* `set`
+* `to`
+* `from`
+* `by`
+* `take`
+* `out`
+* `parameter`
+* `parameters`
+* `that`
+* `returns`
+* `no`
+* `argument`
+* `arguments`
+* `go`
+* `sleep`
+* `does`
+* `has`
+* `is`
+* `have`
+* `greater`
+* `less`
+* `than`
+* `equal`
