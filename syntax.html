@@ -204,7 +204,7 @@ please call add_ints with the arguments 5 as x and 6 as y.
 
 please call add_3_ints with the arguments 5 as x, 6 as y and 7 as z.
 </code></pre>
-<h2 id="grammar"><a class="header" href="#grammar">Grammar</a></h2>
+<h1 id="grammar"><a class="header" href="#grammar">Grammar</a></h1>
 <p>The grammar is written in BNF</p>
 <pre><code class="language-bnf">program ::= body
 body ::= (statement)*
@@ -237,7 +237,7 @@ while ::= &quot;repeat while&quot; expr &quot;do&quot;
 break ::= &quot;break out of this while&quot;
 
 
-{function}
+{ function }
 fn-decl ::= &quot;create function&quot; ident &quot;with&quot; params fn-return
                 body
             &quot;please end function&quot; ident
@@ -248,21 +248,21 @@ multi-params ::=&quot;the parameters&quot; typed-ident (&quot;,&quot; typed-iden
 fn-return ::=&quot;that returns&quot; type
 return ::=&quot;return&quot; expr &quot;from the function&quot;
 
-{other}
+{ other }
 terminate ::= &quot;go to sleep&quot;
 
-{fn calls}
+{ fn calls }
 call ::= &quot;call&quot; ident &quot;with&quot; call-args
 call-args ::= no-arg | single-arg | multi-arg
 no-arg ::=&quot;no arguments&quot;
 single-arg ::=&quot;the argument&quot; expr &quot;as&quot; ident
 multi-arg ::=&quot;the arguments&quot; expr &quot;as&quot; ident (&quot;,&quot; expr &quot;as&quot; ident)* &quot;and&quot; expr &quot;as&quot; ident
 
-{type}
+{ type }
 type ::= ident | nullable
 nullable ::= &quot;absent&quot; | &quot;null&quot; | &quot;novalue&quot; | &quot;undefined&quot;
 
-{expressions}
+{ expressions }
 expr ::= comparison
 
 comparison ::= term ((
@@ -294,6 +294,74 @@ number ::= int | float
 float ::= &quot;-&quot;? &quot;regexp:\d&quot;+ &quot;.&quot;? &quot;regexp:\d&quot;+
 int ::= &quot;-&quot;? &quot;regexp:\d&quot;+
 </code></pre>
+<h1 id="list-of-keywords"><a class="header" href="#list-of-keywords">List of keywords</a></h1>
+<h2 id="normal-keywords"><a class="header" href="#normal-keywords">Normal keywords</a></h2>
+<p>Normal keywords cannot be used as identifiers</p>
+<ul>
+<li><code>please</code></li>
+<li><code>as</code></li>
+<li><code>initialize</code></li>
+<li><code>variable</code></li>
+<li><code>end</code></li>
+<li><code>check</code></li>
+<li><code>whether</code></li>
+<li><code>then</code></li>
+<li><code>do</code></li>
+<li><code>otherwise</code></li>
+<li><code>break</code></li>
+<li><code>this</code></li>
+<li><code>create</code></li>
+<li><code>function</code></li>
+<li><code>call</code></li>
+<li><code>and</code></li>
+<li><code>absent</code></li>
+<li><code>null</code></li>
+<li><code>novalue</code></li>
+<li><code>undefined</code></li>
+<li><code>true</code></li>
+<li><code>false</code></li>
+<li><code>not</code></li>
+<li><code>or</code></li>
+<li><code>repeat</code></li>
+<li><code>return</code></li>
+<li><code>while</code></li>
+</ul>
+<h2 id="conditional-keywords"><a class="header" href="#conditional-keywords">Conditional keywords</a></h2>
+<p>Conditional keywords can be used as identifiers</p>
+<ul>
+<li><code>add</code></li>
+<li><code>sub</code></li>
+<li><code>mul</code></li>
+<li><code>div</code></li>
+<li><code>mod</code></li>
+<li><code>with</code></li>
+<li><code>the</code></li>
+<li><code>value</code></li>
+<li><code>of</code></li>
+<li><code>set</code></li>
+<li><code>to</code></li>
+<li><code>from</code></li>
+<li><code>by</code></li>
+<li><code>take</code></li>
+<li><code>out</code></li>
+<li><code>parameter</code></li>
+<li><code>parameters</code></li>
+<li><code>that</code></li>
+<li><code>returns</code></li>
+<li><code>no</code></li>
+<li><code>argument</code></li>
+<li><code>arguments</code></li>
+<li><code>go</code></li>
+<li><code>sleep</code></li>
+<li><code>does</code></li>
+<li><code>has</code></li>
+<li><code>is</code></li>
+<li><code>have</code></li>
+<li><code>greater</code></li>
+<li><code>less</code></li>
+<li><code>than</code></li>
+<li><code>equal</code></li>
+</ul>
 
                     </main>
 
