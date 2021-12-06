@@ -1,12 +1,15 @@
 # Install
 
-The only way to use VFPL for now is to build the runtime yourself.
+You can either download the binaries from the [releases](https://github.com/VFPLang/vfpl/releases) or build the latest main branch yourself.
 
-## Dependencies
+
+## Building it yourself
+
+### Dependencies
 
 - [Rust](https://www.rust-lang.org/) needs to be installed
 
-## Steps
+### Steps
 
 1. Clone the [https://github.com/VFPLang/vfpl](https://github.com/VFPLang/vfpl) repository
 2. Optionally, run `cargo test`
