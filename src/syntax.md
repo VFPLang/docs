@@ -100,6 +100,8 @@ body ::= (statement)*
 
 typed-ident ::= ident "as" type
 
+value-ident ::= expr "as" ident
+
 ident ::="regexp:\w"+
 
 // type
@@ -110,23 +112,32 @@ nullable ::= "absent" | "null" | "novalue" | "undefined"
 
 
 // function
-fn-decl ::= "create function" ident "with" params fn-return
+fn-decl ::= "create function" ident "with" fn-params fn-return
                 body
             "please end function" ident
-params ::= no-params | single-params | multi-params
-no-params ::= "no parameters"
-single-params ::="the parameter" typed-ident
-multi-params ::="the parameters" typed-ident ("," typed-ident)* "and" typed-ident
+fn-params ::= fn-no-params | fn-single-params | fn-multi-params
+fn-no-params ::= "no parameters"
+fn-single-params ::="the parameter" typed-ident
+fn-multi-params ::="the parameters" typed-ident ("," typed-ident)* "and" typed-ident
 fn-return ::="that returns" type
+
+
+// structure
+struct-def ::= "define structure" ident "with" struct-fields "please end define"
+struct-fields ::= struct-one-field | struct-multi-fields
+struct-one-field ::= struct-field
+struct-multi-fields ::= struct-field ("," struct-field)* "and" struct-field
+struct-field ::= "the field" typed-ident
 
 ////// Statement rules
 
 statement ::= "please" (
+    fn-decl |
+    struct-def |
     variable-init |
     variable-set |
     if |
     while |
-    fn-decl |
     break |
     return |
     terminate |
@@ -180,17 +191,23 @@ primary-expr ::= "(" expr ")" | literal
 
 // function call
 call ::= "call" ident "with" call-args
-call-args ::= no-arg | single-arg | multi-arg
-no-arg ::="no arguments"
-single-arg ::="the argument" expr "as" ident
-multi-arg ::="the arguments" expr "as" ident ("," expr "as" ident)* "and" expr "as" ident
+call-args ::= call-no-arg | call-single-arg | call-multi-arg
+call-no-arg ::="no arguments"
+call-single-arg ::="the argument" value-ident
+call-multi-arg ::="the arguments" value-ident ("," value-ident)* "and" value-ident
 
 
 // literals
-literal ::= nullable | "regexp:\".*\"" | number | "true" | "false" | ident
+literal ::= struct-literal |nullable | "regexp:\".*\"" | number | "true" | "false" | ident
 number ::= int | float
 float ::= "-"? "regexp:\d"+ "."? "regexp:\d"+
 int ::= "-"? "regexp:\d"+
+
+// struct literal
+struct-literal ::= ident "with" struct-lit-fields
+struct-lit-fields ::= struct-lit-no-fields | struct-lit-fields-some
+struct-lit-no-fields ::= "no fields"
+struct-lit-fields-some::= value-ident (("," value-ident)* "and" value-ident)?
 ```
 
 # List of keywords
@@ -199,32 +216,33 @@ int ::= "-"? "regexp:\d"+
 
 Normal keywords cannot be used as identifiers
 
-* `please`
-* `as`
-* `initialize`
-* `variable`
-* `end`
-* `check`
-* `whether`
-* `then`
-* `do`
-* `otherwise`
-* `break`
-* `this`
-* `create`
-* `function`
-* `call`
-* `and`
 * `absent`
-* `null`
-* `novalue`
-* `undefined`
-* `true`
+* `and`
+* `as`
+* `break`
+* `call`
+* `check`
+* `create`
+* `do`
+* `end`
 * `false`
+* `function`
+* `initialize`
 * `not`
+* `novalue`
+* `null`
 * `or`
+* `otherwise`
+* `please`
 * `repeat`
 * `return`
+* `structure`
+* `then`
+* `this`
+* `true`
+* `undefined`
+* `variable`
+* `whether`
 * `while`
 
 ## Conditional keywords
@@ -232,34 +250,36 @@ Normal keywords cannot be used as identifiers
 Conditional keywords can be used as identifiers
 
 * `add`
-* `sub`
-* `mul`
-* `div`
-* `mod`
-* `with`
-* `the`
-* `value`
-* `of`
-* `set`
-* `to`
-* `from`
+* `argument`
+* `arguments`
 * `by`
-* `take`
+* `div`
+* `does`
+* `equal`
+* `field`
+* `fields`
+* `from`
+* `go`
+* `greater`
+* `has`
+* `have`
+* `is`
+* `less`
+* `mod`
+* `mul`
+* `no`
+* `of`
 * `out`
 * `parameter`
 * `parameters`
-* `that`
 * `returns`
-* `no`
-* `argument`
-* `arguments`
-* `go`
+* `set`
 * `sleep`
-* `does`
-* `has`
-* `is`
-* `have`
-* `greater`
-* `less`
+* `sub`
+* `take`
 * `than`
-* `equal`
+* `that`
+* `the`
+* `to`
+* `value`
+* `with`
