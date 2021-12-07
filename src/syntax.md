@@ -123,7 +123,7 @@ fn-return ::="that returns" type
 
 
 // structure
-struct-def ::= "define structure" ident "with" struct-fields "please end define"
+struct-def ::= "define structure" ident "with" struct-fields? "please end define"
 struct-fields ::= struct-field (("," struct-field)* "and" struct-field)?
 struct-field ::= "the field" typed-ident
 
