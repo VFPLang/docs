@@ -89,8 +89,38 @@ please call add_3_ints with the arguments 5 as x, 6 as y and 7 as z.
 The grammar is written in BNF
 
 ```bnf
+// VFPL Grammar
+
+////// Base rules
+
 program ::= body
 body ::= (statement)*
+
+////// Other rules
+
+typed-ident ::= ident "as" type
+
+ident ::="regexp:\w"+
+
+// type
+type ::= ident | nullable
+nullable ::= "absent" | "null" | "novalue" | "undefined"
+
+////// Item rules
+
+
+// function
+fn-decl ::= "create function" ident "with" params fn-return
+                body
+            "please end function" ident
+params ::= no-params | single-params | multi-params
+no-params ::= "no parameters"
+single-params ::="the parameter" typed-ident
+multi-params ::="the parameters" typed-ident ("," typed-ident)* "and" typed-ident
+fn-return ::="that returns" type
+
+////// Statement rules
+
 statement ::= "please" (
     variable-init |
     variable-set |
@@ -103,13 +133,11 @@ statement ::= "please" (
     expr
 ) "."
 
-typed-ident ::= ident "as" type
-ident ::="regexp:\w"+
-
 variable-init ::= "initialize variable" typed-ident "with the value of" expr
 variable-set ::= "set the variable" ident "to the value of" expr
 
-{ control flow }
+
+// control flow
 if ::= if-part "please end check"
 if-part ::= "check wheter" expr ", then do" body (else)?
 else ::= "otherwise, " (if-part | body)
@@ -117,35 +145,15 @@ else ::= "otherwise, " (if-part | body)
 while ::= "repeat while" expr "do"
                 body
          "please end while"
+
 break ::= "break out of this while"
 
-
-{ function }
-fn-decl ::= "create function" ident "with" params fn-return
-                body
-            "please end function" ident
-params ::= no-params | single-params | multi-params
-no-params ::= "no parameters"
-single-params ::="the parameter" typed-ident
-multi-params ::="the parameters" typed-ident ("," typed-ident)* "and" typed-ident
-fn-return ::="that returns" type
 return ::="return" expr "from the function"
 
-{ other }
 terminate ::= "go to sleep"
 
-{ fn calls }
-call ::= "call" ident "with" call-args
-call-args ::= no-arg | single-arg | multi-arg
-no-arg ::="no arguments"
-single-arg ::="the argument" expr "as" ident
-multi-arg ::="the arguments" expr "as" ident ("," expr "as" ident)* "and" expr "as" ident
+////// Expression rules
 
-{ type }
-type ::= ident | nullable
-nullable ::= "absent" | "null" | "novalue" | "undefined"
-
-{ expressions }
 expr ::= comparison
 
 comparison ::= term ((
@@ -162,7 +170,6 @@ add ::= "add" factor "to" term
 subtract ::= "subtract" factor "from" term
 
 factor::= multiply | divide | modulo | call-expr
-
 multiply ::= "multiply" call-expr "with" factor
 divide ::= "divide" call-expr "by" factor
 modulo ::= "take" call-expr "modulo" factor
@@ -171,7 +178,15 @@ call-expr ::= call | primary-expr
 
 primary-expr ::= "(" expr ")" | literal
 
-{ literals }
+// function call
+call ::= "call" ident "with" call-args
+call-args ::= no-arg | single-arg | multi-arg
+no-arg ::="no arguments"
+single-arg ::="the argument" expr "as" ident
+multi-arg ::="the arguments" expr "as" ident ("," expr "as" ident)* "and" expr "as" ident
+
+
+// literals
 literal ::= nullable | "regexp:\".*\"" | number | "true" | "false" | ident
 number ::= int | float
 float ::= "-"? "regexp:\d"+ "."? "regexp:\d"+
