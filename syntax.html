@@ -241,9 +241,7 @@ fn-return ::=&quot;that returns&quot; type
 
 // structure
 struct-def ::= &quot;define structure&quot; ident &quot;with&quot; struct-fields &quot;please end define&quot;
-struct-fields ::= struct-one-field | struct-multi-fields
-struct-one-field ::= struct-field
-struct-multi-fields ::= struct-field (&quot;,&quot; struct-field)* &quot;and&quot; struct-field
+struct-fields ::= struct-field ((&quot;,&quot; struct-field)* &quot;and&quot; struct-field)?
 struct-field ::= &quot;the field&quot; typed-ident
 
 ////// Statement rules
