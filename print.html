@@ -246,6 +246,8 @@ body ::= (statement)*
 
 typed-ident ::= ident &quot;as&quot; type
 
+value-ident ::= expr &quot;as&quot; ident
+
 ident ::=&quot;regexp:\w&quot;+
 
 // type
@@ -256,23 +258,32 @@ nullable ::= &quot;absent&quot; | &quot;null&quot; | &quot;novalue&quot; | &quot
 
 
 // function
-fn-decl ::= &quot;create function&quot; ident &quot;with&quot; params fn-return
+fn-decl ::= &quot;create function&quot; ident &quot;with&quot; fn-params fn-return
                 body
             &quot;please end function&quot; ident
-params ::= no-params | single-params | multi-params
-no-params ::= &quot;no parameters&quot;
-single-params ::=&quot;the parameter&quot; typed-ident
-multi-params ::=&quot;the parameters&quot; typed-ident (&quot;,&quot; typed-ident)* &quot;and&quot; typed-ident
+fn-params ::= fn-no-params | fn-single-params | fn-multi-params
+fn-no-params ::= &quot;no parameters&quot;
+fn-single-params ::=&quot;the parameter&quot; typed-ident
+fn-multi-params ::=&quot;the parameters&quot; typed-ident (&quot;,&quot; typed-ident)* &quot;and&quot; typed-ident
 fn-return ::=&quot;that returns&quot; type
+
+
+// structure
+struct-def ::= &quot;define structure&quot; ident &quot;with&quot; struct-fields &quot;please end define&quot;
+struct-fields ::= struct-one-field | struct-multi-fields
+struct-one-field ::= struct-field
+struct-multi-fields ::= struct-field (&quot;,&quot; struct-field)* &quot;and&quot; struct-field
+struct-field ::= &quot;the field&quot; typed-ident
 
 ////// Statement rules
 
 statement ::= &quot;please&quot; (
+    fn-decl |
+    struct-def |
     variable-init |
     variable-set |
     if |
     while |
-    fn-decl |
     break |
     return |
     terminate |
@@ -326,85 +337,94 @@ primary-expr ::= &quot;(&quot; expr &quot;)&quot; | literal
 
 // function call
 call ::= &quot;call&quot; ident &quot;with&quot; call-args
-call-args ::= no-arg | single-arg | multi-arg
-no-arg ::=&quot;no arguments&quot;
-single-arg ::=&quot;the argument&quot; expr &quot;as&quot; ident
-multi-arg ::=&quot;the arguments&quot; expr &quot;as&quot; ident (&quot;,&quot; expr &quot;as&quot; ident)* &quot;and&quot; expr &quot;as&quot; ident
+call-args ::= call-no-arg | call-single-arg | call-multi-arg
+call-no-arg ::=&quot;no arguments&quot;
+call-single-arg ::=&quot;the argument&quot; value-ident
+call-multi-arg ::=&quot;the arguments&quot; value-ident (&quot;,&quot; value-ident)* &quot;and&quot; value-ident
 
 
 // literals
-literal ::= nullable | &quot;regexp:\&quot;.*\&quot;&quot; | number | &quot;true&quot; | &quot;false&quot; | ident
+literal ::= struct-literal |nullable | &quot;regexp:\&quot;.*\&quot;&quot; | number | &quot;true&quot; | &quot;false&quot; | ident
 number ::= int | float
 float ::= &quot;-&quot;? &quot;regexp:\d&quot;+ &quot;.&quot;? &quot;regexp:\d&quot;+
 int ::= &quot;-&quot;? &quot;regexp:\d&quot;+
+
+// struct literal
+struct-literal ::= ident &quot;with&quot; struct-lit-fields
+struct-lit-fields ::= struct-lit-no-fields | struct-lit-fields-some
+struct-lit-no-fields ::= &quot;no fields&quot;
+struct-lit-fields-some::= value-ident ((&quot;,&quot; value-ident)* &quot;and&quot; value-ident)?
 </code></pre>
 <h1 id="list-of-keywords"><a class="header" href="#list-of-keywords">List of keywords</a></h1>
 <h2 id="normal-keywords"><a class="header" href="#normal-keywords">Normal keywords</a></h2>
 <p>Normal keywords cannot be used as identifiers</p>
 <ul>
-<li><code>please</code></li>
-<li><code>as</code></li>
-<li><code>initialize</code></li>
-<li><code>variable</code></li>
-<li><code>end</code></li>
-<li><code>check</code></li>
-<li><code>whether</code></li>
-<li><code>then</code></li>
-<li><code>do</code></li>
-<li><code>otherwise</code></li>
-<li><code>break</code></li>
-<li><code>this</code></li>
-<li><code>create</code></li>
-<li><code>function</code></li>
-<li><code>call</code></li>
-<li><code>and</code></li>
 <li><code>absent</code></li>
-<li><code>null</code></li>
-<li><code>novalue</code></li>
-<li><code>undefined</code></li>
-<li><code>true</code></li>
+<li><code>and</code></li>
+<li><code>as</code></li>
+<li><code>break</code></li>
+<li><code>call</code></li>
+<li><code>check</code></li>
+<li><code>create</code></li>
+<li><code>do</code></li>
+<li><code>end</code></li>
 <li><code>false</code></li>
+<li><code>function</code></li>
+<li><code>initialize</code></li>
 <li><code>not</code></li>
+<li><code>novalue</code></li>
+<li><code>null</code></li>
 <li><code>or</code></li>
+<li><code>otherwise</code></li>
+<li><code>please</code></li>
 <li><code>repeat</code></li>
 <li><code>return</code></li>
+<li><code>structure</code></li>
+<li><code>then</code></li>
+<li><code>this</code></li>
+<li><code>true</code></li>
+<li><code>undefined</code></li>
+<li><code>variable</code></li>
+<li><code>whether</code></li>
 <li><code>while</code></li>
 </ul>
 <h2 id="conditional-keywords"><a class="header" href="#conditional-keywords">Conditional keywords</a></h2>
 <p>Conditional keywords can be used as identifiers</p>
 <ul>
 <li><code>add</code></li>
-<li><code>sub</code></li>
-<li><code>mul</code></li>
-<li><code>div</code></li>
-<li><code>mod</code></li>
-<li><code>with</code></li>
-<li><code>the</code></li>
-<li><code>value</code></li>
-<li><code>of</code></li>
-<li><code>set</code></li>
-<li><code>to</code></li>
-<li><code>from</code></li>
+<li><code>argument</code></li>
+<li><code>arguments</code></li>
 <li><code>by</code></li>
-<li><code>take</code></li>
+<li><code>div</code></li>
+<li><code>does</code></li>
+<li><code>equal</code></li>
+<li><code>field</code></li>
+<li><code>fields</code></li>
+<li><code>from</code></li>
+<li><code>go</code></li>
+<li><code>greater</code></li>
+<li><code>has</code></li>
+<li><code>have</code></li>
+<li><code>is</code></li>
+<li><code>less</code></li>
+<li><code>mod</code></li>
+<li><code>mul</code></li>
+<li><code>no</code></li>
+<li><code>of</code></li>
 <li><code>out</code></li>
 <li><code>parameter</code></li>
 <li><code>parameters</code></li>
-<li><code>that</code></li>
 <li><code>returns</code></li>
-<li><code>no</code></li>
-<li><code>argument</code></li>
-<li><code>arguments</code></li>
-<li><code>go</code></li>
+<li><code>set</code></li>
 <li><code>sleep</code></li>
-<li><code>does</code></li>
-<li><code>has</code></li>
-<li><code>is</code></li>
-<li><code>have</code></li>
-<li><code>greater</code></li>
-<li><code>less</code></li>
+<li><code>sub</code></li>
+<li><code>take</code></li>
 <li><code>than</code></li>
-<li><code>equal</code></li>
+<li><code>that</code></li>
+<li><code>the</code></li>
+<li><code>to</code></li>
+<li><code>value</code></li>
+<li><code>with</code></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="standard-library"><a class="header" href="#standard-library">Standard library</a></h1>
 <p>The standard library is very minimal for now, but it will be extended in the future</p>
