@@ -206,8 +206,38 @@ please call add_3_ints with the arguments 5 as x, 6 as y and 7 as z.
 </code></pre>
 <h1 id="grammar"><a class="header" href="#grammar">Grammar</a></h1>
 <p>The grammar is written in BNF</p>
-<pre><code class="language-bnf">program ::= body
+<pre><code class="language-bnf">// VFPL Grammar
+
+////// Base rules
+
+program ::= body
 body ::= (statement)*
+
+////// Other rules
+
+typed-ident ::= ident &quot;as&quot; type
+
+ident ::=&quot;regexp:\w&quot;+
+
+// type
+type ::= ident | nullable
+nullable ::= &quot;absent&quot; | &quot;null&quot; | &quot;novalue&quot; | &quot;undefined&quot;
+
+////// Item rules
+
+
+// function
+fn-decl ::= &quot;create function&quot; ident &quot;with&quot; params fn-return
+                body
+            &quot;please end function&quot; ident
+params ::= no-params | single-params | multi-params
+no-params ::= &quot;no parameters&quot;
+single-params ::=&quot;the parameter&quot; typed-ident
+multi-params ::=&quot;the parameters&quot; typed-ident (&quot;,&quot; typed-ident)* &quot;and&quot; typed-ident
+fn-return ::=&quot;that returns&quot; type
+
+////// Statement rules
+
 statement ::= &quot;please&quot; (
     variable-init |
     variable-set |
@@ -220,13 +250,11 @@ statement ::= &quot;please&quot; (
     expr
 ) &quot;.&quot;
 
-typed-ident ::= ident &quot;as&quot; type
-ident ::=&quot;regexp:\w&quot;+
-
 variable-init ::= &quot;initialize variable&quot; typed-ident &quot;with the value of&quot; expr
 variable-set ::= &quot;set the variable&quot; ident &quot;to the value of&quot; expr
 
-{ control flow }
+
+// control flow
 if ::= if-part &quot;please end check&quot;
 if-part ::= &quot;check wheter&quot; expr &quot;, then do&quot; body (else)?
 else ::= &quot;otherwise, &quot; (if-part | body)
@@ -234,35 +262,15 @@ else ::= &quot;otherwise, &quot; (if-part | body)
 while ::= &quot;repeat while&quot; expr &quot;do&quot;
                 body
          &quot;please end while&quot;
+
 break ::= &quot;break out of this while&quot;
 
-
-{ function }
-fn-decl ::= &quot;create function&quot; ident &quot;with&quot; params fn-return
-                body
-            &quot;please end function&quot; ident
-params ::= no-params | single-params | multi-params
-no-params ::= &quot;no parameters&quot;
-single-params ::=&quot;the parameter&quot; typed-ident
-multi-params ::=&quot;the parameters&quot; typed-ident (&quot;,&quot; typed-ident)* &quot;and&quot; typed-ident
-fn-return ::=&quot;that returns&quot; type
 return ::=&quot;return&quot; expr &quot;from the function&quot;
 
-{ other }
 terminate ::= &quot;go to sleep&quot;
 
-{ fn calls }
-call ::= &quot;call&quot; ident &quot;with&quot; call-args
-call-args ::= no-arg | single-arg | multi-arg
-no-arg ::=&quot;no arguments&quot;
-single-arg ::=&quot;the argument&quot; expr &quot;as&quot; ident
-multi-arg ::=&quot;the arguments&quot; expr &quot;as&quot; ident (&quot;,&quot; expr &quot;as&quot; ident)* &quot;and&quot; expr &quot;as&quot; ident
+////// Expression rules
 
-{ type }
-type ::= ident | nullable
-nullable ::= &quot;absent&quot; | &quot;null&quot; | &quot;novalue&quot; | &quot;undefined&quot;
-
-{ expressions }
 expr ::= comparison
 
 comparison ::= term ((
@@ -279,7 +287,6 @@ add ::= &quot;add&quot; factor &quot;to&quot; term
 subtract ::= &quot;subtract&quot; factor &quot;from&quot; term
 
 factor::= multiply | divide | modulo | call-expr
-
 multiply ::= &quot;multiply&quot; call-expr &quot;with&quot; factor
 divide ::= &quot;divide&quot; call-expr &quot;by&quot; factor
 modulo ::= &quot;take&quot; call-expr &quot;modulo&quot; factor
@@ -288,7 +295,15 @@ call-expr ::= call | primary-expr
 
 primary-expr ::= &quot;(&quot; expr &quot;)&quot; | literal
 
-{ literals }
+// function call
+call ::= &quot;call&quot; ident &quot;with&quot; call-args
+call-args ::= no-arg | single-arg | multi-arg
+no-arg ::=&quot;no arguments&quot;
+single-arg ::=&quot;the argument&quot; expr &quot;as&quot; ident
+multi-arg ::=&quot;the arguments&quot; expr &quot;as&quot; ident (&quot;,&quot; expr &quot;as&quot; ident)* &quot;and&quot; expr &quot;as&quot; ident
+
+
+// literals
 literal ::= nullable | &quot;regexp:\&quot;.*\&quot;&quot; | number | &quot;true&quot; | &quot;false&quot; | ident
 number ::= int | float
 float ::= &quot;-&quot;? &quot;regexp:\d&quot;+ &quot;.&quot;? &quot;regexp:\d&quot;+
